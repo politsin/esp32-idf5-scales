@@ -28,11 +28,11 @@ extern "C" void app_main(void) {
 
   // tasks.
   xTaskCreate(&loop, "loop", min * 3, NULL, 2, NULL);
-  xTaskCreate(uartTask, "uart", min * 2, NULL, 1, &uart);
+  xTaskCreate(uartTask, "uart", min * 10, NULL, 1, &uart);
   xTaskCreate(hx711Task, "hx711", min * 16, NULL, 1, &hx711);
   xTaskCreate(blinkTask, "blink", min * 2, NULL, 1, &blink);
-  xTaskCreate(buttonTask, "button", min * 3, NULL, 1, &button);
-  xTaskCreate(encoderTask, "encoder", min * 3, NULL, 1, &encoder);
+  xTaskCreate(buttonTask, "button", min * 4, NULL, 1, &button);
+  xTaskCreate(encoderTask, "encoder", min * 6, NULL, 1, &encoder);
   // xTaskCreate(screenTask, "screen", min * 64, NULL, 1, &screen);
 }
 
