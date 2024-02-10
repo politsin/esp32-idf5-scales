@@ -5,22 +5,22 @@
 
 #include "driver/gpio.h"
 #include "driver/uart.h"
+#include <esp_err.h>
 #include <esp_log.h>
 #include <hal/gpio_types.h>
 #include <hal/uart_types.h>
 #include <rom/gpio.h>
 #include <stdio.h>
-#include <esp_err.h>
 
 #define UART_TAG "UART"
 #define BUF_SIZE (1024)
 
 typedef gpio_num_t Pintype;
 static constexpr Pintype RTS = GPIO_NUM_2;
-static constexpr Pintype TX = GPIO_NUM_15;
-static constexpr Pintype RX = GPIO_NUM_13;
+static constexpr Pintype TX = GPIO_NUM_13;
+static constexpr Pintype RX = GPIO_NUM_15;
 // GND ↑ GND--13--15--2
-static constexpr Pintype CTS = GPIO_NUM_19; 
+static constexpr Pintype CTS = GPIO_NUM_19;
 static int badu = 115200;
 uart_port_t uart_no = 2;
 
@@ -35,7 +35,7 @@ void uartTask(void *pvParam) {
       .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
       .source_clk = UART_SCLK_DEFAULT,
   };
-  
+
   int intr_alloc_flags = 0;
   ESP_ERROR_CHECK(
       uart_driver_install(uart_no, BUF_SIZE * 2, 0, 0, NULL, intr_alloc_flags));
@@ -53,9 +53,9 @@ void uartTask(void *pvParam) {
       data[len] = '\0';
       ESP_LOGI(UART_TAG, "Recv str: %s", (char *)data);
     }
-    if (true) {
+    if (false) {
       ESP_LOGW(UART_TAG, "uart!");
+      vTaskDelay(xBlockTime);
     }
-    vTaskDelay(xBlockTime);
   }
 }
