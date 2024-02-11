@@ -25,6 +25,7 @@ app_data_t app_data = {
     .raw = 0,
     .scale = 0,
     .xp = xPortGetFreeHeapSize(),
+    .k = 278,
 };
 
 extern "C" void app_main(void) {

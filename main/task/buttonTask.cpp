@@ -7,12 +7,13 @@
 static const Pintype BUTTON_PIN1 = GPIO_NUM_12;
 static const Pintype BUTTON_PIN2 = GPIO_NUM_14;
 
-#include <esp_log.h>
 #include <button.h>
+#include <esp_log.h>
 #define BUTTON_TAG "BUTTON"
 
 typedef gpio_num_t Pintype;
-// #include "hx711Task.h"
+#include "freertos/task.h"
+#include "hx711Task.h"
 #include "main.h"
 // esp_idf_lib_helpers.h
 // #include "mqttTask.h"
@@ -56,7 +57,7 @@ static void on_button(button_t *btn, button_state_t state) {
     if (btn == &btn2) {
       app_data.btn_blue = 1;
       ESP_LOGI(BUTTON_TAG, "BLUE PRESSED");
-      // xTaskNotify(hx711, 1, eSetValueWithOverwrite);
+      xTaskNotify(hx711, 1, eSetValueWithOverwrite);
     }
 
   }
