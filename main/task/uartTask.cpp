@@ -56,7 +56,7 @@ void uartTask(void *pvParam) {
                    " ENC:" + std::to_string(app_data.encoder) +
                    " SCALE:" + std::to_string(app_data.scale) +
                    " RAW:" + std::to_string(app_data.raw) +
-                   "\r\n";
+                   " XP:" + std::to_string(app_data.xp) + "\r\n";
       app_data.btn_enc = 0;
       app_data.btn_red = 0;
       app_data.btn_blue = 0;

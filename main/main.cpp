@@ -24,6 +24,7 @@ app_data_t app_data = {
     .encoder = 0,
     .raw = 0,
     .scale = 0,
+    .xp = xPortGetFreeHeapSize(),
 };
 
 extern "C" void app_main(void) {
@@ -46,12 +47,13 @@ extern "C" void app_main(void) {
 void loop(void *pvParameter) {
   uint32_t size = 0;
   uint32_t count = 0;
-  const TickType_t xBlockTime = pdMS_TO_TICKS(3 * 1000);
+  const TickType_t xBlockTime = pdMS_TO_TICKS(5 * 1000);
   while (1) {
     count++;
     if ((count % 100) == true) {
       size = xPortGetFreeHeapSize();
-      ESP_LOGW(MAINTAG, "xP %ld", size);
+      app_data.xp = size;
+      // ESP_LOGW(MAINTAG, "xP %ld", size);
       vTaskDelay(xBlockTime);
     }
   }

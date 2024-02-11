@@ -17,6 +17,7 @@ typedef struct {
   int32_t encoder;
   int32_t raw;
   int32_t scale;
+  uint32_t xp;
 } app_data_t;
 #endif /* APP_MAIN_H_ */
 
