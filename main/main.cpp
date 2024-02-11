@@ -14,8 +14,8 @@
 #include "task/blinkTask.h"
 #include "task/hx711Task.h"
 #include "task/buttonTask.h"
+#include "task/screenTask.h"
 #include "task/encoderTask.h"
-// #include "screen/screenTask.h"
 
 app_data_t app_data = {
     .btn_enc = 0,
@@ -39,6 +39,7 @@ extern "C" void app_main(void) {
   xTaskCreate(uartTask, "uart", min * 10, NULL, 1, &uart);
   xTaskCreate(hx711Task, "hx711", min * 16, NULL, 1, &hx711);
   xTaskCreate(blinkTask, "blink", min * 4, NULL, 1, &blink);
+  xTaskCreate(screenTask, "screen", min * 8, NULL, 1, &screen);
   xTaskCreate(buttonTask, "button", min * 4, NULL, 1, &button);
   xTaskCreate(encoderTask, "encoder", min * 6, NULL, 1, &encoder);
   // xTaskCreate(screenTask, "screen", min * 64, NULL, 1, &screen);

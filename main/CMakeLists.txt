@@ -5,15 +5,14 @@ idf_component_register(
     "task/uartTask.cpp"
     "task/blinkTask.cpp"
     "task/buttonTask.cpp"
+    "task/screenTask.cpp"
     "task/encoderTask.cpp"
-    # "screen/screenTask.cpp"
-    # "task/stepperTask.cpp"
-    # "task/DendoStepper.cpp"
-    # "screen/fontx.cpp"
-    # "screen/st7789.cpp"
-    # INCLUDE_DIRS "util" "task" "screen"
+    # screen
+    "screen/fontx.cpp"
+    "screen/st7789.cpp"
   INCLUDE_DIRS 
     "."
     "util" 
     "task"
+    "screen"
 )

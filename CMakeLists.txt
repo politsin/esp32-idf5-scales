@@ -10,12 +10,12 @@ project(esp32-idf5-blink)
 
 list(APPEND EXTRA_COMPONENT_DIRS hx711)
 list(APPEND EXTRA_COMPONENT_DIRS button)
-# list(APPEND EXTRA_COMPONENT_DIRS st7789)
-# list(APPEND EXTRA_COMPONENT_DIRS DendoStepper)
+list(APPEND EXTRA_COMPONENT_DIRS st7789)
 list(APPEND EXTRA_COMPONENT_DIRS esp32-c3-rotary-encoder)
 
 ## Tests
 # set(EXTRA_COMPONENT_DIRS_OTHER ${CMAKE_CURRENT_SOURCE_DIR}\\..\\esp-idf-lib-other\\components)
+# list(APPEND EXTRA_COMPONENT_DIRS_OTHER st7789)
 # list(APPEND EXTRA_COMPONENT_DIRS_OTHER esp32-c3-rotary-encoder)
 
 # Create a SPIFFS image from the contents of the 'font' directory
