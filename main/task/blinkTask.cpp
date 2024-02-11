@@ -22,7 +22,7 @@ void blinkTask(void *pvParam) {
     vTaskDelay(50 / portTICK_PERIOD_MS);
     gpio_set_level(LED, !isOn);
     vTaskDelay(450 / portTICK_PERIOD_MS);
-    if (true) {
+    if (false) {
       ESP_LOGW(BLINK_TAG, "blink!");
     }
     vTaskDelay(xBlockTime);
