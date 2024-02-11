@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 //.
+#include <main.h>
 #include <iostream>
 using std::string;
 
@@ -49,24 +50,7 @@ void encoderTask(void *pvParam) {
   }
 }
 
-/**
- * loop Esamples.
- */
-void loopEsamples() {
-#if CONFIG_REPORT_MODE_QUEUE
-  rotenc_event_t event = {};
-  if (rotenc_wait_event(&handle, &event) == ESP_OK) {
-    event_callback(event);
-  }
-#elif CONFIG_REPORT_MODE_CALLBACK
-  vTaskDelay(1000 / portTICK_PERIOD_MS);
-#elif CONFIG_REPORT_MODE_POLLING
-  vTaskDelay(100 / portTICK_PERIOD_MS);
-  rotenc_event_t event = {0};
-  ESP_ERROR_CHECK(rotenc_polling(&handle, &event));
-  event_callback(event);
-#endif
-}
+
 
 /**
  * configure Encoder Pins.
@@ -95,15 +79,35 @@ void configureEncoderPins() {
 static void button_callback(void *arg) {
   // rotenc_handle_t *handle = (rotenc_handle_t *)arg;
   ESP_LOGI(ENC_TAG, "Push button");
+  app_data.btn_enc = 1;
 }
 static void event_callback(rotenc_event_t event) {
   enc = event.position;
+  app_data.encoder = enc;
   // xTaskNotify(poliv, event.position, eSetValueWithOverwrite);
   // xTaskNotify(numDisplay, event.position, eSetValueWithOverwrite);
-
 #if CONFIG_ENCODER_DEBUG
   ESP_LOGI(ENC_TAG, "Event: position %d, direction %s", event.position,
            event.direction ? (event.direction == ROTENC_CW ? "CW" : "CCW")
                            : "NOT_SET");
+#endif
+}
+
+/**
+ * loop Esamples.
+ */
+void loopEsamples() {
+#if CONFIG_REPORT_MODE_QUEUE
+  rotenc_event_t event = {};
+  if (rotenc_wait_event(&handle, &event) == ESP_OK) {
+    event_callback(event);
+  }
+#elif CONFIG_REPORT_MODE_CALLBACK
+  vTaskDelay(1000 / portTICK_PERIOD_MS);
+#elif CONFIG_REPORT_MODE_POLLING
+  vTaskDelay(100 / portTICK_PERIOD_MS);
+  rotenc_event_t event = {0};
+  ESP_ERROR_CHECK(rotenc_polling(&handle, &event));
+  event_callback(event);
 #endif
 }

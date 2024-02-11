@@ -6,6 +6,7 @@
 #include <rom/gpio.h>
 #include <stdio.h>
 
+#include <main.h>
 #define MAINTAG "MAIN"
 
 // tasks
@@ -15,10 +16,15 @@
 #include "task/buttonTask.h"
 #include "task/encoderTask.h"
 // #include "screen/screenTask.h"
-// #include "task/stepperTask.h"
 
-// Loop Task
-void loop(void *pvParameter);
+app_data_t app_data = {
+    .btn_enc = 0,
+    .btn_red = 0,
+    .btn_blue = 0,
+    .encoder = 0,
+    .raw = 0,
+    .scale = 0,
+};
 
 extern "C" void app_main(void) {
   esp_log_level_set("wifi", ESP_LOG_WARN);
@@ -30,12 +36,13 @@ extern "C" void app_main(void) {
   xTaskCreate(&loop, "loop", min * 3, NULL, 2, NULL);
   xTaskCreate(uartTask, "uart", min * 10, NULL, 1, &uart);
   xTaskCreate(hx711Task, "hx711", min * 16, NULL, 1, &hx711);
-  xTaskCreate(blinkTask, "blink", min * 2, NULL, 1, &blink);
+  xTaskCreate(blinkTask, "blink", min * 4, NULL, 1, &blink);
   xTaskCreate(buttonTask, "button", min * 4, NULL, 1, &button);
   xTaskCreate(encoderTask, "encoder", min * 6, NULL, 1, &encoder);
   // xTaskCreate(screenTask, "screen", min * 64, NULL, 1, &screen);
 }
 
+// Loop Task
 void loop(void *pvParameter) {
   uint32_t size = 0;
   uint32_t count = 0;

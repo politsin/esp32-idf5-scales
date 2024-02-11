@@ -33,12 +33,28 @@ static void on_button(button_t *btn, button_state_t state) {
   // static constexpr Pintype PIN_LED1 = GPIO_NUM_12;
   // static constexpr Pintype PIN_LED2 = GPIO_NUM_14;
   // const TickType_t xBlockTime = pdMS_TO_TICKS(25);
-  if (state == BUTTON_PRESSED) {
+  if (state == BUTTON_PRESSED_LONG) {
     if (btn == &btn1) {
-      ESP_LOGI(BUTTON_TAG, "RED PRESSED");
+      app_data.btn_red = 3;
+      ESP_LOGI(BUTTON_TAG, "RED PRESSED LONG");
       // xTaskNotify(mcp23x17, -1, eSetValueWithOverwrite);
     }
+  }
+  if (state == BUTTON_CLICKED) {
     if (btn == &btn2) {
+      app_data.btn_blue = 2;
+      ESP_LOGI(BUTTON_TAG, "BLUE CLICK");
+      // xTaskNotify(hx711, 1, eSetValueWithOverwrite);
+    }
+  }
+  if (state == BUTTON_PRESSED) {
+    if (btn == &btn1) {
+      app_data.btn_red = 1;
+      // xTaskNotify(mcp23x17, -1, eSetValueWithOverwrite);
+      ESP_LOGI(BUTTON_TAG, "RED PRESSED");
+    }
+    if (btn == &btn2) {
+      app_data.btn_blue = 1;
       ESP_LOGI(BUTTON_TAG, "BLUE PRESSED");
       // xTaskNotify(hx711, 1, eSetValueWithOverwrite);
     }
@@ -51,7 +67,6 @@ static void on_button(button_t *btn, button_state_t state) {
     }
     if (btn == &btn2) {
       ESP_LOGI(BUTTON_TAG, "BLUE RELEASED");
-      vTaskDelay(pdMS_TO_TICKS(500));
       // xTaskNotify(hx711, 0, eSetValueWithOverwrite);
     }
   }

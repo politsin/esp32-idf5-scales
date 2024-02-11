@@ -12,6 +12,11 @@
 #include <rom/gpio.h>
 #include <stdio.h>
 
+#include "main.h"
+#include <iostream>
+using std::string;
+using std::to_string;
+
 #define UART_TAG "UART"
 #define BUF_SIZE (1024)
 
@@ -26,7 +31,7 @@ uart_port_t uart_no = 2;
 
 TaskHandle_t uart;
 void uartTask(void *pvParam) {
-  const TickType_t xBlockTime = pdMS_TO_TICKS(3 * 1000);
+  const TickType_t xBlockTime = pdMS_TO_TICKS(250);
   uart_config_t uart_config = {
       .baud_rate = badu,
       .data_bits = UART_DATA_8_BITS,
@@ -44,18 +49,39 @@ void uartTask(void *pvParam) {
   uint8_t *data = (uint8_t *)malloc(BUF_SIZE);
 
   while (true) {
-    // Read data from the UART
-    int len =
-        uart_read_bytes(uart_no, data, (BUF_SIZE - 1), 20 / portTICK_PERIOD_MS);
-    // Write data back to the UART
-    uart_write_bytes(uart_no, (const char *)data, len);
-    if (len) {
-      data[len] = '\0';
-      ESP_LOGI(UART_TAG, "Recv str: %s", (char *)data);
-    }
-    if (false) {
-      ESP_LOGW(UART_TAG, "uart!");
+    if (true) {
+      string msg = "BTN_ENC:" + std::to_string(app_data.btn_enc) +
+                   " RED:" + std::to_string(app_data.btn_red) +
+                   " BLUE:" + std::to_string(app_data.btn_blue) +
+                   " ENC:" + std::to_string(app_data.encoder) +
+                   " SCALE:" + std::to_string(app_data.scale) +
+                   " RAW:" + std::to_string(app_data.raw) +
+                   "\r\n";
+      app_data.btn_enc = 0;
+      app_data.btn_red = 0;
+      app_data.btn_blue = 0;
+      // ESP_LOGW(UART_TAG, "uart! %s", msg.c_str());
+      uart_write_bytes(uart_no, msg.c_str(), msg.length());
       vTaskDelay(xBlockTime);
     }
+    else {
+      // Read data from the UART
+      int len = uart_read_bytes(uart_no, data, (BUF_SIZE - 1),
+                                20 / portTICK_PERIOD_MS);
+      // Write data back to the UART
+      uart_write_bytes(uart_no, (const char *)data, len);
+      if (len) {
+        data[len] = '\0';
+        ESP_LOGI(UART_TAG, "Recv str: %s", (char *)data);
+      }
+    }
   }
+}
+
+// Float To String.
+string scaleToSting(float hx) {
+  char data[16];
+  sprintf(data, "%.2f", hx);
+  string metric = string(data);
+  return metric;
 }

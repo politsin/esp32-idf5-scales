@@ -63,7 +63,7 @@ void hx711Task(void *pvParam) {
     if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
       tare = raw;
     }
-    ESP_LOGI(hx711TAG, "Scale: %ld, Raw delta: %ld", weight, raw - tare);
+    // ESP_LOGI(hx711TAG, "Scale: %ld, Raw delta: %ld", weight, raw - tare);
     vTaskDelay(xBlockTime);
   }
 }
@@ -86,7 +86,7 @@ int32_t scale(hx711_t dev) {
     scale = scale + data;
   }
   scale = scale >> oversampling;
-  ESP_LOGI(hx711TAG, "raw: %ld", scale);
+  // ESP_LOGI(hx711TAG, "raw: %ld", scale);
 
   return -scale;
 }
