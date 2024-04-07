@@ -73,6 +73,14 @@ void screenTask(void *pvParam) {
     if (false) {
       ESP_LOGW(SCREEN_TAG, "screen!");
     }
+    if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
+      scale = (int32_t)notify_value;
+      weight = (float)scale / 1000;
+      char data[16];
+      sprintf(data, "%0.3f", weight);
+      // ESP_LOGI(SCREEN_TAG, "w: %0.2f", weight);
+      printText(&dev, fx32G, data);
+    }
     vTaskDelay(xBlockTime);
   }
 }

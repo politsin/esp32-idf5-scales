@@ -18,6 +18,7 @@ using std::string;
 using std::to_string;
 
 #define UART_TAG "UART"
+#define UART_SEND "SEND"
 #define BUF_SIZE (1024)
 
 typedef gpio_num_t Pintype;
@@ -31,14 +32,14 @@ uart_port_t uart_no = 2;
 
 TaskHandle_t uart;
 void uartTask(void *pvParam) {
-  const TickType_t xBlockTime = pdMS_TO_TICKS(250);
+  const TickType_t xBlockTime = pdMS_TO_TICKS(300);
   uart_config_t uart_config = {
       .baud_rate = badu,
       .data_bits = UART_DATA_8_BITS,
-      .parity = UART_PARITY_DISABLE,
+      // .parity = UART_PARITY_DISABLE,
       .stop_bits = UART_STOP_BITS_1,
       .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
-      .source_clk = UART_SCLK_DEFAULT,
+      .rx_flow_ctrl_thresh = 122,
   };
 
   int intr_alloc_flags = 0;
@@ -56,12 +57,15 @@ void uartTask(void *pvParam) {
                    " ENC:" + std::to_string(app_data.encoder) +
                    " SCALE:" + std::to_string(app_data.scale) +
                    " RAW:" + std::to_string(app_data.raw) +
-                   " XP:" + std::to_string(app_data.xp) + "\r\n";
+                   " XP:" + std::to_string(app_data.xp);
+      // " XP:" + std::to_string(app_data.xp) + "\r\n";
       app_data.btn_enc = 0;
       app_data.btn_red = 0;
       app_data.btn_blue = 0;
       // ESP_LOGW(UART_TAG, "uart! %s", msg.c_str());
       uart_write_bytes(uart_no, msg.c_str(), msg.length());
+      // ESP_LOGI(UART_SEND, "|=| %s", msg.c_str());
+      printf("|=|%s|^|\n", msg.c_str());
       vTaskDelay(xBlockTime);
     }
     else {

@@ -1,15 +1,14 @@
-// #include "uartTask.h"
-// #include "screenTask.h"
 #include <esp_log.h>
 #include <freertos/FreeRTOS.h>
-// #include <freertos/queue.h>
+#include <freertos/queue.h>
 #include <freertos/task.h>
 #include <math.h>
 // Task:.
 #include <hx711.h>
 #include <hx711Task.h>
 #include <main.h>
-// #include "screenTask.h"
+// #include "uartTask.h"
+#include "screenTask.h"
 // using std::string;
 // 10  =  10300
 // 20  =  20500
@@ -59,7 +58,7 @@ void hx711Task(void *pvParam) {
       weight = app_data.k * (raw - tare) / 100;
       app_data.raw = raw;
       app_data.scale = weight;
-      // xTaskNotify(screen, (uint32_t)weight, eSetValueWithOverwrite);
+      xTaskNotify(screen, (uint32_t)weight, eSetValueWithOverwrite);
       // if (weight < 0) {
       //   weight = 0;
       // }
@@ -78,7 +77,7 @@ void hx711Task(void *pvParam) {
 int32_t scale(hx711_t dev) {
   int32_t scale = 0;
   uint16_t oversampling = 1;
-  for (uint32_t i = 0; i < pow(3, oversampling); i++) {
+  for (uint32_t i = 0; i < pow(4, oversampling); i++) {
     esp_err_t r = hx711_wait(&dev, 150);
     if (r != ESP_OK) {
       ESP_LOGE(hx711TAG, "Device not found: %d (%s)", r, esp_err_to_name(r));
