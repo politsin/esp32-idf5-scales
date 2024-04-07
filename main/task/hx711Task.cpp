@@ -51,7 +51,7 @@ void hx711Task(void *pvParam) {
   }
   ESP_LOGW(hx711TAG, "Scale 1, raw: %ld, tare: %ld", raw, tare);
   int32_t weight = 0;
-  app_data.k = 278;
+  app_data.k = 408;
   while (true) {
     raw = scale(dev);
     if (raw) {
@@ -76,8 +76,8 @@ void hx711Task(void *pvParam) {
 
 int32_t scale(hx711_t dev) {
   int32_t scale = 0;
-  uint16_t oversampling = 1;
-  for (uint32_t i = 0; i < pow(4, oversampling); i++) {
+  static uint16_t oversampling = 6;
+  for (uint32_t i = 0; i < pow(2, oversampling); i++) {
     esp_err_t r = hx711_wait(&dev, 150);
     if (r != ESP_OK) {
       ESP_LOGE(hx711TAG, "Device not found: %d (%s)", r, esp_err_to_name(r));
