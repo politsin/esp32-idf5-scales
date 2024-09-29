@@ -20,9 +20,14 @@ typedef struct {
   uint32_t xp;
   int32_t k;
 } app_data_t;
+typedef struct {
+  uint32_t steps;
+  uint32_t speed;
+} app_config_t;
 #endif /* APP_MAIN_H_ */
 
 extern app_data_t app_data;
+extern app_config_t app_config;
 // i2c::
 // void icScan();
 // #define SCL_GPIO 25

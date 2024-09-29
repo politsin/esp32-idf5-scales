@@ -11,6 +11,9 @@ idf_component_register(
     # screen
     "screen/fontx.cpp"
     "screen/st7789.cpp"
+    # util
+    "util/config.cpp"
+    "util/nvsInit.cpp"
   INCLUDE_DIRS 
     "."
     "util"

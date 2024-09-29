@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include <main.h>
+#include "util/config.h"
 #define MAINTAG "MAIN"
 
 // tasks
@@ -29,7 +30,10 @@ app_data_t app_data = {
     .k = 278,
 };
 
+
+
 extern "C" void app_main(void) {
+  config_init();
   esp_log_level_set("wifi", ESP_LOG_WARN);
   esp_log_level_set("gpio", ESP_LOG_WARN);
   esp_log_level_set("DendoStepper", ESP_LOG_WARN);

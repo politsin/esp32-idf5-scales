@@ -15,10 +15,16 @@
 #include <stdio.h>
 
 #include "main.h"
+#include "util/config.h"
 #include <iostream>
 using std::string;
 using std::to_string;
 #define STEPPER_TAG "STEPPER"
+
+app_config_t app_config = {
+    .steps = 0,
+    .speed = 0,
+};
 
 DendoStepper_config_t stepConfig = {.stepPin = (uint8_t)GPIO_NUM_13,
                                     .dirPin = (uint8_t)GPIO_NUM_15,
@@ -31,17 +37,34 @@ DendoStepper step = DendoStepper();
 TaskHandle_t stepper;
 void stepperTask(void *pvParam) {
   static const TickType_t xBlockTime = pdMS_TO_TICKS(50);
+  // config
   static const TickType_t xOffTime = pdMS_TO_TICKS(5000);
+  esp_err_t err;
+  config->get_item("steps", app_config.steps);
+  config->get_item("speed", app_config.speed);
+  if (app_config.steps < 100) {
+    app_config.steps = 10000;
+  }
+  if (app_config.speed < 100) {
+    app_config.speed = 10000;
+  }
+  ESP_LOGW(STEPPER_TAG, "Steps FROM MEM: %lu", app_config.steps);
+  ESP_LOGW(STEPPER_TAG, "Speed FROM MEM: %lu", app_config.speed);
+
+
+  // DendoStepper init
   step.config(&stepConfig);
   step.init();
-  step.setSpeed(10000, 1000, 1000);
-  step.setStepsPerMm(10);
+  // step.setSpeed(app_config.speed, 1000, 1000);
+  step.setSpeed(1500, 500, 500);
+  // step.setStepsPerMm(10);
   step.disableMotor();
+  step.runInf(false);
 
   uint32_t notify_value;
   uint32_t mode;
   int16_t value;
-  // step.runInf(true);
+  int32_t steps = app_config.steps;
   int32_t encoder;
   ESP_LOGW(STEPPER_TAG, "stepper!");
   while (true) {
@@ -50,7 +73,7 @@ void stepperTask(void *pvParam) {
       if (notify_value == 5000) {
         ESP_LOGI(STEPPER_TAG, "run");
         step.enableMotor();
-        step.runPos(10000);
+        step.runPos(app_config.steps);
         // step.runPos(-500);
         // step.stop();
         vTaskDelay(xOffTime);
@@ -66,7 +89,10 @@ void stepperTask(void *pvParam) {
         step.disableMotor();
         // step.stop();
       } else {
-        ESP_LOGI(STEPPER_TAG, "Encoder diff %ld", encoder);
+        app_config.steps = steps - encoder;
+        config->set_item("steps", app_config.steps);
+        config->commit();
+        ESP_LOGI(STEPPER_TAG, "Encoder diff %ld -> steps = %ld", encoder, app_config.steps);
       }
       // Old staff;
       mode = notify_value & 0xff;
