@@ -31,66 +31,58 @@ DendoStepper step = DendoStepper();
 TaskHandle_t stepper;
 void stepperTask(void *pvParam) {
   static const TickType_t xBlockTime = pdMS_TO_TICKS(50);
+  static const TickType_t xOffTime = pdMS_TO_TICKS(5000);
   step.config(&stepConfig);
   step.init();
   step.setSpeed(10000, 1000, 1000);
   step.setStepsPerMm(10);
-  // dStep.init(dConfig.step_p, dConfig.dir_p, dConfig.en_p, dConfig.timer_group,
-  //            dConfig.timer_idx, MICROSTEP_1, 200);
-  // uint16_t accT = 1;
-  // uint16_t speed = 10;
-  // bool dir = true;
-  // vTaskDelay(pdMS_TO_TICKS(250));
-  // if (encoder_counter > 0) {
-  //   dir = true;
-  // } else {
-  //   dir = false;
-  // }
-  // for (size_t i = 0; i < abs(encoder_counter); i++) {
-  //   dStep.setSpeed(speed * i, accT);
-  //   dStep.runPermanent(dir);
-  //   ESP_LOGI(STEPPER_TAG, "ACC: %d", i);
-  //   pdMS_TO_TICKS(100);
-  // }
-  // dStep.setSpeed(speed * abs(encoder_counter), accT);
-  // dStep.runPermanent(dir);
+  step.disableMotor();
+
   uint32_t notify_value;
-  // uint32_t mode;
-  // int16_t value;
+  uint32_t mode;
+  int16_t value;
   // step.runInf(true);
+  int32_t encoder;
   ESP_LOGW(STEPPER_TAG, "stepper!");
   while (true) {
     if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
-      ESP_LOGI(STEPPER_TAG, "run");
-      step.runPos(10000);
-      ESP_LOGI(STEPPER_TAG, "done");
-      // mode = notify_value & 0xff;
-      // value = (int16_t)(notify_value >> 16);
-      // switch (mode) {
-      // case 1:
-      //   ESP_LOGI(STEPPER_TAG, "ENC: %d", value);
-      //   if (value != 0) {
-      //     dStep.setSpeed(speed * abs(value), accT);
-      //   }
-      //   if (value > 0) {
-      //     dir = true;
-      //   } else {
-      //     dir = false;
-      //   }
-      //   break;
-      // case 2:
-      //   ESP_LOGI(STEPPER_TAG, "ENC_BTN: %d", value);
-      //   break;
-      // default:
-      //   ESP_LOGI(STEPPER_TAG, "enc! %d %x", value, mode);
-      //   break;
-      // }
+      encoder = (int32_t)notify_value;
+      if (notify_value == 5000) {
+        ESP_LOGI(STEPPER_TAG, "run");
+        step.enableMotor();
+        step.runPos(10000);
+        // step.runPos(-500);
+        // step.stop();
+        vTaskDelay(xOffTime);
+        step.disableMotor();
+        ESP_LOGI(STEPPER_TAG, "done");
+      }
+      else if (notify_value == 5001) {
+        ESP_LOGI(STEPPER_TAG, "Encoder STOP");
+        step.enableMotor();
+        step.stop(); 
+        step.runPos(-1000);
+        vTaskDelay(xOffTime);
+        step.disableMotor();
+        // step.stop();
+      } else {
+        ESP_LOGI(STEPPER_TAG, "Encoder diff %ld", encoder);
+      }
+      // Old staff;
+      mode = notify_value & 0xff;
+      value = (int16_t)(notify_value >> 16);
+      switch (mode) {
+      case 1:
+        ESP_LOGI(STEPPER_TAG, "ENC: %d", value);
+        break;
+      case 2:
+        // ESP_LOGI(STEPPER_TAG, "ENC_BTN: %d", value);
+        break;
+      default:
+        // ESP_LOGI(STEPPER_TAG, "enc! %d %x", value, mode);
+        break;
+      }
     }
-    // dStep.runPermanent(dir);
-    // if (dStep.getState() <= IDLE) {
-    //   dStep.runAbsolute(esp_random() >> 18);
-    // }
-    // step.runPos(10000);
     vTaskDelay(xBlockTime);
   }
 }
