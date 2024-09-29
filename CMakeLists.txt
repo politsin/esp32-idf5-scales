@@ -11,6 +11,7 @@ project(esp32-idf5-blink)
 list(APPEND EXTRA_COMPONENT_DIRS hx711)
 list(APPEND EXTRA_COMPONENT_DIRS button)
 list(APPEND EXTRA_COMPONENT_DIRS st7789)
+list(APPEND EXTRA_COMPONENT_DIRS DendoStepper)
 list(APPEND EXTRA_COMPONENT_DIRS esp32-c3-rotary-encoder)
 
 ## Tests

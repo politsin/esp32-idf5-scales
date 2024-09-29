@@ -59,7 +59,7 @@ void screenTask(void *pvParam) {
   ColorBarTest(&dev, TFT_WIDTH, TFT_HEIGHT);
   vTaskDelay(50);
   lcdFillScreen(&dev, BLACK);
-  xTaskNotify(hx711, 0, eSetValueWithOverwrite);
+  // xTaskNotify(hx711, 0, eSetValueWithOverwrite);
   // Fonts:
   FontxFile fx24G[2];
   FontxFile fx32G[2];
@@ -75,9 +75,10 @@ void screenTask(void *pvParam) {
     }
     if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
       scale = (int32_t)notify_value;
-      weight = (float)scale / 1000;
+      // weight = (float)scale / 1000;
       char data[16];
-      sprintf(data, "%0.3f", weight);
+      sprintf(data, "%ld", scale);
+      // sprintf(data, "%0.3f", scale);
       // ESP_LOGI(SCREEN_TAG, "w: %0.2f", weight);
       printText(&dev, fx32G, data);
     }

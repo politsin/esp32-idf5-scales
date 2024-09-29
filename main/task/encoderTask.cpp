@@ -11,6 +11,9 @@
 #include <iostream>
 using std::string;
 
+//.
+#include "screenTask.h"
+
 // #include "mqttTask.h"
 #include "rotary_encoder.h"
 #define ENC_TAG "ENCODER"
@@ -43,6 +46,7 @@ void encoderTask(void *pvParam) {
       enc_current = enc;
       // encMessage = {"encoder", std::to_string(enc)};
       // xQueueSend(mqttQueue, &encMessage, xBlockTime);
+      xTaskNotify(screen, (uint32_t)enc, eSetValueWithOverwrite);
       ESP_LOGW(ENC_TAG, "encoder= %ld ticks", enc);
       vTaskDelay(pdMS_TO_TICKS(30));
     }
