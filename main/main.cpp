@@ -16,6 +16,7 @@
 #include "task/hx711Task.h"
 #include "task/buttonTask.h"
 #include "task/screenTask.h"
+#include "task/counterTask.h"
 #include "task/encoderTask.h"
 #include "task/stepperTask.h"
 
@@ -46,6 +47,7 @@ extern "C" void app_main(void) {
   xTaskCreate(screenTask, "screen", min * 8, NULL, 1, &screen);
   xTaskCreate(buttonTask, "button", min * 4, NULL, 1, &button);
   xTaskCreate(encoderTask, "encoder", min * 6, NULL, 1, &encoder);
+  xTaskCreate(counterTask, "counter", min * 6, NULL, 1, &counter);
   xTaskCreate(stepperTask, "stepper", min * 8, NULL, 1, &stepper);
   // xTaskCreatePinnedToCore(uartTask, "uart", min * 10, NULL, 1, &uart, 0);
   // xTaskCreate(hx711Task, "hx711", min * 16, NULL, 1, &hx711);
