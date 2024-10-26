@@ -7,12 +7,12 @@
 #define I2C "I2C"
 #define CONFIG_IOT_I2C "1"
 #define CONFIG_IOT_I2C_SCAN "1"
-#define I2C_SDA GPIO_NUM_16
-#define I2C_SCL GPIO_NUM_17
+#define I2C_SDA GPIO_NUM_26
+#define I2C_SCL GPIO_NUM_27
 
 #include "i2c.h"
 
-esp_err_t i2c_init() {
+esp_err_t i2c_init(bool scan) {
 #ifdef CONFIG_IOT_I2C
   ESP_LOGI(I2C, "I2C init. SDA=%d SCL=%d", I2C_SDA, I2C_SCL);
   i2c_config_t conf;
@@ -26,8 +26,10 @@ esp_err_t i2c_init() {
   i2c_param_config(I2C_NUM_0, &conf);
   i2c_driver_install(I2C_NUM_0, I2C_MODE_MASTER, 0, 0, 0);
   ESP_LOGI(I2C, "I2C init OK");
-  // Try To SCAN
-  ESP_ERROR_CHECK(iot_i2c_scan(1));
+  if (scan) {
+    // Try To SCAN
+    ESP_ERROR_CHECK(iot_i2c_scan(1));
+  }
 #else
   ESP_LOGW(IOT, "I2C OFF");
 #endif
@@ -63,7 +65,7 @@ esp_err_t iot_i2c_scan(uint8_t i2c_scan_count = 1) {
 
 TaskHandle_t i2cScan;
 void i2cScanTask(void *pvParam) {
-  i2c_init();
+  i2c_init(true);
   static const TickType_t xBlockTime = pdMS_TO_TICKS(50);
   while (true) {
     iot_i2c_scan();

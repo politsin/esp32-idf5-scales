@@ -8,7 +8,7 @@
 extern TaskHandle_t i2cScan;
 void i2cScanTask(void *pvParam);
 
-esp_err_t i2c_init();
+esp_err_t i2c_init(bool scan);
 esp_err_t iot_i2c_scan(uint8_t i2c_scan_count);
 /**
  * I2C scan
@@ -19,12 +19,13 @@ esp_err_t iot_i2c_scan(uint8_t i2c_scan_count);
  *  xTaskCreate(i2cScanTask, "i2cScan", min * 4, NULL, 5, &i2cScan);
  *
  * 48 - EC ADC
+ * 39 - TOF AP3216
  */
 //      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 // 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
 // 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 // 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
-// 30: -- -- -- -- -- -- -- -- -- -- -- -- 3c -- -- --
+// 30: -- -- -- -- -- -- -- -- -- 39 -- -- 3c -- -- --
 // 40: -- -- -- -- 44 -- -- -- 48 -- -- -- -- -- -- --
 // 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
 // 60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
