@@ -9,6 +9,7 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 project(esp32-idf5-blink)
 
 list(APPEND EXTRA_COMPONENT_DIRS hx711)
+list(APPEND EXTRA_COMPONENT_DIRS i2cdev)
 list(APPEND EXTRA_COMPONENT_DIRS button)
 list(APPEND EXTRA_COMPONENT_DIRS st7789)
 list(APPEND EXTRA_COMPONENT_DIRS DendoStepper)

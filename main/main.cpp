@@ -20,6 +20,8 @@
 #include "task/encoderTask.h"
 #include "task/stepperTask.h"
 
+#include "util/i2c.h"
+
 app_data_t app_data = {
     .btn_enc = 0,
     .btn_red = 0,
@@ -52,6 +54,7 @@ extern "C" void app_main(void) {
   xTaskCreate(stepperTask, "stepper", min * 8, NULL, 1, &stepper);
   // xTaskCreatePinnedToCore(uartTask, "uart", min * 10, NULL, 1, &uart, 0);
   // xTaskCreate(hx711Task, "hx711", min * 16, NULL, 1, &hx711);
+  xTaskCreate(i2cScanTask, "i2cScan", min * 4, NULL, 5, &i2cScan);
 }
 
 // Loop Task

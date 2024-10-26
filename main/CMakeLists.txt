@@ -15,6 +15,7 @@ idf_component_register(
     # util
     "util/config.cpp"
     "util/nvsInit.cpp"
+    "util/i2c.cpp"
   INCLUDE_DIRS 
     "."
     "util"
