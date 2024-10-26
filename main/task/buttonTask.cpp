@@ -47,15 +47,16 @@ static void on_button(button_t *btn, button_state_t state) {
       app_data.btn_blue = 2;
       ESP_LOGI(BUTTON_TAG, "BLUE CLICK");
       xTaskNotify(counter, 5000, eSetValueWithOverwrite);
+      xTaskNotify(stepper, 5000, eSetValueWithOverwrite);
     }
   }
   if (state == BUTTON_PRESSED) {
     if (btn == &btn1) {
       app_data.btn_red = 1;
       // xTaskNotify(mcp23x17, -1, eSetValueWithOverwrite);
-      // xTaskNotify(stepper, 5001, eSetValueWithOverwrite);
       ESP_LOGI(BUTTON_TAG, "RED PRESSED");
       xTaskNotify(counter, 5001, eSetValueWithOverwrite);
+      xTaskNotify(stepper, 5001, eSetValueWithOverwrite);
     }
     if (btn == &btn2) {
       app_data.btn_blue = 1;

@@ -41,6 +41,9 @@ void counterTask(void *pvParam) {
   uint32_t notify_value;
   gpio_set_level(AI, 0);
   while (true) {
+    if (true) {
+      vTaskDelay(xBlockTime * 1000000);
+    }
     if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
       if (notify_value == 5000) {
         ESP_LOGI(COUNTER_TAG, "blue btn");

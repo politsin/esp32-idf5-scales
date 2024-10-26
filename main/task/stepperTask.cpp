@@ -38,7 +38,7 @@ TaskHandle_t stepper;
 void stepperTask(void *pvParam) {
   static const TickType_t xBlockTime = pdMS_TO_TICKS(50);
   // config
-  static const TickType_t xOffTime = pdMS_TO_TICKS(5000);
+  static const TickType_t xOffTime = pdMS_TO_TICKS(100);
   esp_err_t err;
   config->get_item("steps", app_config.steps);
   config->get_item("speed", app_config.speed);
@@ -73,7 +73,8 @@ void stepperTask(void *pvParam) {
       if (notify_value == 5000) {
         ESP_LOGI(STEPPER_TAG, "run");
         step.enableMotor();
-        step.runPos(app_config.steps);
+        // step.runPos(app_config.steps);
+        step.runPos(20);
         // step.runPos(-500);
         // step.stop();
         vTaskDelay(xOffTime);
@@ -84,7 +85,7 @@ void stepperTask(void *pvParam) {
         ESP_LOGI(STEPPER_TAG, "Encoder STOP");
         step.enableMotor();
         step.stop(); 
-        step.runPos(-1000);
+        step.runPos(-20);
         vTaskDelay(xOffTime);
         step.disableMotor();
         // step.stop();
