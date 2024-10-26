@@ -12,10 +12,10 @@ static const Pintype BUTTON_PIN2 = GPIO_NUM_14;
 #define BUTTON_TAG "BUTTON"
 
 typedef gpio_num_t Pintype;
-#include "freertos/task.h"
-#include "stepperTask.h"
 #include "counterTask.h"
+#include "freertos/task.h"
 #include "main.h"
+#include "stepperTask.h"
 // esp_idf_lib_helpers.h
 // #include "mqttTask.h"
 
@@ -26,15 +26,10 @@ static const char *states[] = {
     [BUTTON_PRESSED_LONG] = "pressed long",
 };
 
-
 static button_t btn1, btn2;
 TaskHandle_t button;
 // mqttMessage eventMessage;
 static void on_button(button_t *btn, button_state_t state) {
-  // int isOn = 0;
-  // static constexpr Pintype PIN_LED1 = GPIO_NUM_12;
-  // static constexpr Pintype PIN_LED2 = GPIO_NUM_14;
-  // const TickType_t xBlockTime = pdMS_TO_TICKS(25);
   if (state == BUTTON_PRESSED_LONG) {
     if (btn == &btn1) {
       app_data.btn_red = 3;
@@ -46,16 +41,16 @@ static void on_button(button_t *btn, button_state_t state) {
     if (btn == &btn2) {
       app_data.btn_blue = 2;
       ESP_LOGI(BUTTON_TAG, "BLUE CLICK");
-      xTaskNotify(counter, 5000, eSetValueWithOverwrite);
+      // xTaskNotify(counter, 5000, eSetValueWithOverwrite);
       xTaskNotify(stepper, 5000, eSetValueWithOverwrite);
     }
   }
   if (state == BUTTON_PRESSED) {
     if (btn == &btn1) {
       app_data.btn_red = 1;
-      // xTaskNotify(mcp23x17, -1, eSetValueWithOverwrite);
       ESP_LOGI(BUTTON_TAG, "RED PRESSED");
-      xTaskNotify(counter, 5001, eSetValueWithOverwrite);
+      // xTaskNotify(mcp23x17, -1, eSetValueWithOverwrite);
+      // xTaskNotify(counter, 5001, eSetValueWithOverwrite);
       xTaskNotify(stepper, 5001, eSetValueWithOverwrite);
     }
     if (btn == &btn2) {
@@ -63,7 +58,6 @@ static void on_button(button_t *btn, button_state_t state) {
       ESP_LOGI(BUTTON_TAG, "BLUE PRESSED");
       // xTaskNotify(hx711, 1, eSetValueWithOverwrite);
     }
-
   }
   if (state == BUTTON_RELEASED) {
     if (btn == &btn1) {

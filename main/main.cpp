@@ -38,6 +38,7 @@ extern "C" void app_main(void) {
   esp_log_level_set("wifi", ESP_LOG_WARN);
   esp_log_level_set("gpio", ESP_LOG_WARN);
   esp_log_level_set("DendoStepper", ESP_LOG_WARN);
+  esp_log_level_set("BUTTON", ESP_LOG_WARN);
   ESP_LOGW(MAINTAG, "Hello world!!");
   uint32_t min = 768 + configSTACK_OVERHEAD_TOTAL;
 
@@ -47,7 +48,7 @@ extern "C" void app_main(void) {
   xTaskCreate(screenTask, "screen", min * 8, NULL, 1, &screen);
   xTaskCreate(buttonTask, "button", min * 4, NULL, 1, &button);
   xTaskCreate(encoderTask, "encoder", min * 6, NULL, 1, &encoder);
-  xTaskCreate(counterTask, "counter", min * 6, NULL, 1, &counter);
+  // xTaskCreate(counterTask, "counter", min * 6, NULL, 1, &counter);
   xTaskCreate(stepperTask, "stepper", min * 8, NULL, 1, &stepper);
   // xTaskCreatePinnedToCore(uartTask, "uart", min * 10, NULL, 1, &uart, 0);
   // xTaskCreate(hx711Task, "hx711", min * 16, NULL, 1, &hx711);

@@ -1,13 +1,13 @@
 idf_component_register(
   SRCS
     "main.cpp"
-    "task/hx711Task.cpp"
-    "task/uartTask.cpp"
+    # "task/hx711Task.cpp"
+    # "task/uartTask.cpp"
     "task/blinkTask.cpp"
     "task/buttonTask.cpp"
     "task/screenTask.cpp"
     "task/encoderTask.cpp"
-    "task/counterTask.cpp"
+    # "task/counterTask.cpp"
     "task/stepperTask.cpp"
     # screen
     "screen/fontx.cpp"
