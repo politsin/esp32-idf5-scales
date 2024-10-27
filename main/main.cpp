@@ -34,7 +34,7 @@ app_data_t app_data = {
     .k = 278,
 };
 
-
+#include "i2cdev.h"
 
 extern "C" void app_main(void) {
   config_init();
@@ -46,7 +46,8 @@ extern "C" void app_main(void) {
   uint32_t min = 768 + configSTACK_OVERHEAD_TOTAL;
 
   // tasks.
-  i2c_init(false);
+  // i2c_init(false);
+  ESP_ERROR_CHECK(i2cdev_init());
   xTaskCreate(&loop, "loop", min * 3, NULL, 2, NULL);
   xTaskCreate(tofTask, "tof", min * 4, NULL, 1, &tof);
   xTaskCreate(blinkTask, "blink", min * 4, NULL, 1, &blink);
