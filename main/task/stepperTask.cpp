@@ -64,7 +64,7 @@ void stepperTask(void *pvParam) {
         ESP_LOGW(STEPPER_TAG, "Btn STOP %ld", steps);
         step.enableMotor();
         step.stop();
-        step.runPos(-steps);
+        step.runPos(-steps /4);
         vTaskDelay(xOffTime + pdMS_TO_TICKS(steps * 1000 / speed));
         step.disableMotor();
         // step.stop();
