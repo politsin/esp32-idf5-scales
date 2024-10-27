@@ -35,9 +35,9 @@ void useFonts();
 #include "fontx.h"
 #include "hx711Task.h"
 #include "st7789.h"
+#include <main.h>
 #include <string.h>
 #include <sys/dirent.h>
-#include <main.h>
 #define INTERVAL 400
 #define WAIT vTaskDelay(INTERVAL)
 
@@ -54,8 +54,8 @@ void screenTask(void *pvParam) {
   initSPIFFS();
 
   TFT_t dev;
-  spi_master_init(&dev, TFT_MOSI_GPIO, TFT_SCLK_GPIO, TFT_CS_GPIO,
-                  TFT_DC_GPIO, TFT_RESET_GPIO, TFT_BL_GPIO);
+  spi_master_init(&dev, TFT_MOSI_GPIO, TFT_SCLK_GPIO, TFT_CS_GPIO, TFT_DC_GPIO,
+                  TFT_RESET_GPIO, TFT_BL_GPIO);
   lcdInit(&dev, TFT_WIDTH, TFT_HEIGHT, TFT_OFFSETX, TFT_OFFSETY);
 
   // FillTest(&dev, TFT_WIDTH, TFT_HEIGHT);
@@ -77,17 +77,17 @@ void screenTask(void *pvParam) {
   while (true) {
     if (false) {
       ESP_LOGW(SCREEN_TAG, "screen!");
-    }
-    printSteps(&dev, fx32G);
-    if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
-      val = (int32_t)notify_value;
-      // weight = (float)scale / 1000;
-      char value[16];
-      sprintf(value, "enc: %ld", val);
-      // sprintf(data, "%0.3f", val);
-      // ESP_LOGI(SCREEN_TAG, "w: %0.2f", weight);
-      // printText(&dev, fx32G, value);
       printSteps(&dev, fx32G);
+      if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
+        val = (int32_t)notify_value;
+        // weight = (float)scale / 1000;
+        char value[16];
+        sprintf(value, "enc: %ld", val);
+        // sprintf(data, "%0.3f", val);
+        // ESP_LOGI(SCREEN_TAG, "w: %0.2f", weight);
+        // printText(&dev, fx32G, value);
+        printSteps(&dev, fx32G);
+      }
     }
     vTaskDelay(xBlockTime);
   }
@@ -118,7 +118,7 @@ void printSteps(TFT_t *dev, FontxFile *fx) {
   ypos = (height - (strlen((char *)ascii) * fontWidth)) / 2;
   lcdDrawString(dev, fx, xpos - 30, ypos, ascii, color);
   strcpy((char *)ascii, steps);
-  lcdDrawString(dev, fx, xpos -60, ypos, ascii, color);
+  lcdDrawString(dev, fx, xpos - 60, ypos, ascii, color);
 }
 
 void printText(TFT_t *dev, FontxFile *fx, char *text) {

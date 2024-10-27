@@ -10,6 +10,10 @@ void i2cScanTask(void *pvParam);
 
 esp_err_t i2c_init(bool scan);
 esp_err_t iot_i2c_scan(uint8_t i2c_scan_count);
+
+#define CHECK(x) do { esp_err_t __; if ((__ = x) != ESP_OK) return __; } while (0)
+#define CHECK_ARG(VAL) do { if (!(VAL)) return ESP_ERR_INVALID_ARG; } while (0)
+
 /**
  * I2C scan
  *
