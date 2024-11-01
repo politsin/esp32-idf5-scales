@@ -13,6 +13,7 @@ using std::string;
 
 //.
 #include "stepperTask.h"
+#include "counterTask.h"
 #include "screenTask.h"
 
 // #include "mqttTask.h"
@@ -48,8 +49,8 @@ void encoderTask(void *pvParam) {
       // encMessage = {"encoder", std::to_string(enc)};
       // xQueueSend(mqttQueue, &encMessage, xBlockTime);
       xTaskNotify(screen, (uint32_t)enc, eSetValueWithOverwrite);
-      xTaskNotify(stepper, (uint32_t)enc, eSetValueWithOverwrite);
-      ESP_LOGW(ENC_TAG, "encoder= %ld ticks", enc);
+      xTaskNotify(counter, (uint32_t)enc, eSetValueWithOverwrite);
+      ESP_LOGI(ENC_TAG, "encoder= %ld ticks", enc);
       vTaskDelay(pdMS_TO_TICKS(30));
     }
     vTaskDelay(xBlockTime);

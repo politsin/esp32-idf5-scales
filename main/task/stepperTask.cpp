@@ -21,10 +21,6 @@ using std::string;
 using std::to_string;
 #define STEPPER_TAG "STEPPER"
 
-app_config_t app_config = {
-    .steps = 0,
-    .speed = 0,
-};
 
 DendoStepper_config_t stepConfig = {.stepPin = (uint8_t)GPIO_NUM_13,
                                     .dirPin = (uint8_t)GPIO_NUM_15,

@@ -22,7 +22,7 @@ typedef struct {
 } app_data_t;
 typedef struct {
   uint32_t steps;
-  uint32_t speed;
+  int32_t encoder;
 } app_config_t;
 #endif /* APP_MAIN_H_ */
 

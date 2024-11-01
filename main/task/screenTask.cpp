@@ -49,7 +49,7 @@ void printSteps(TFT_t *dev, FontxFile *fx);
 
 TaskHandle_t screen;
 void screenTask(void *pvParam) {
-  const TickType_t xBlockTime = pdMS_TO_TICKS(2 * 1000);
+  const TickType_t xBlockTime = pdMS_TO_TICKS(2000);
 
   initSPIFFS();
 
@@ -75,9 +75,8 @@ void screenTask(void *pvParam) {
   // char value[16];
 
   while (true) {
-    if (false) {
+    if (true) {
       ESP_LOGW(SCREEN_TAG, "screen!");
-      printSteps(&dev, fx32G);
       if (xTaskNotifyWait(0, 0, &notify_value, 0) == pdTRUE) {
         val = (int32_t)notify_value;
         // weight = (float)scale / 1000;
@@ -96,7 +95,7 @@ void screenTask(void *pvParam) {
 void printSteps(TFT_t *dev, FontxFile *fx) {
   char speed[16];
   char steps[16];
-  sprintf(speed, "speed: %ld", app_config.speed);
+  sprintf(speed, "encoder: %ld", app_config.encoder);
   sprintf(steps, "steps: %ld", app_config.steps);
 
   int width = CONFIG_WIDTH;

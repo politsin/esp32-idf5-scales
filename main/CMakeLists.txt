@@ -7,7 +7,7 @@ idf_component_register(
     "task/buttonTask.cpp"
     "task/screenTask.cpp"
     "task/encoderTask.cpp"
-    # "task/counterTask.cpp"
+    "task/counterTask.cpp"
     "task/stepperTask.cpp"
     "task/tofTask.cpp"
     # screen
